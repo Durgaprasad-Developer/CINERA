@@ -1,6 +1,7 @@
 import express from 'express';
 import { verifyAdmin } from '../Middlewares/verifyAdmin.js';
 import { getAdminStats } from "../Controllers/adminDashboardControllers.js";
+import { createGenre, getGenres, deleteGenre } from '../Controllers/genreControllers.js';
 
 
 
