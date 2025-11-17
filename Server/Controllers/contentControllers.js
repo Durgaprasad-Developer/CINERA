@@ -120,3 +120,34 @@ export const deleteContent = async (req, res, next) => {
     next(err);
   }
 };
+
+export const publishContent = async (req, res) => {
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from("content")
+    .update({ published: true })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) return res.status(400).json({ error: error.message });
+
+  res.json({ success: true, data });
+};
+
+export const unpublishContent = async (req, res) => {
+  const { id } = req.params;
+
+  const { data, error } = await supabase
+    .from("content")
+    .update({ published: false })
+    .eq("id", id)
+    .select()
+    .single();
+
+  if (error) return res.status(400).json({ error: error.message });
+
+  res.json({ success: true, data });
+};
+

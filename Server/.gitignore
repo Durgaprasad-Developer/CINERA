@@ -1,3 +1,9 @@
 node_modules
 .env
 routes.txt
+
+/Controllers/userAuthController.js
+/Controllers/userRecommendationControllers.js
+/Controllers/userAuthController.js
+/Routes/userRoutes.js
+/Utils/updateTaste.js

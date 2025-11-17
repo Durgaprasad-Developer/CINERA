@@ -4,6 +4,7 @@ import adminRoutes from './adminRoutes.js';
 import contentRoutes from "./contentRoutes.js";
 import uploadRoutes from "./uploadRoutes.js";
 import streamRoutes from "./streamRoutes.js";
+// import userRoutes from "./userRoutes.js";
 
 
 
@@ -14,6 +15,8 @@ router.use('/admin', adminRoutes);
 router.use("/admin/content", contentRoutes);
 router.use("/admin/upload", uploadRoutes);
 router.use("/stream", streamRoutes);
+// router.use("/user", userRoutes);
+
 
 
 export default router;

@@ -1,8 +1,15 @@
 import supabase from "../Config/supabaseClient.js";
+import { trackEvent } from "../Utils/trackAnalytics.js";
 
 export const getSignedStreamUrl = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // TEMPORARY (until we build user auth)
+    const userId = null;  // or a hardcoded UUID for testing analytics
+
+    // Track analytics (view event)
+    trackEvent(userId, id, "view");
 
     // Fetch content from DB
     const { data: content, error: contentErr } = await supabase
@@ -15,13 +22,12 @@ export const getSignedStreamUrl = async (req, res, next) => {
       return res.status(404).json({ error: "Content not found" });
     }
 
-    const filePath = content.storage_path; // e.g. "videos/170000-test.mp4"
+    const filePath = content.storage_path;
 
-    // Extract bucket name from path → "videos/file.mp4"
     const [bucketName, ...fileParts] = filePath.split("/");
     const finalPath = fileParts.join("/");
 
-    // Create signed streaming URL (valid for 1 hour)
+    // Signed streaming URL (1 hour)
     const { data, error } = await supabase.storage
       .from(bucketName)
       .createSignedUrl(finalPath, 60 * 60);
