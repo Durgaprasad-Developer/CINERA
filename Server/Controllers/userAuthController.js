@@ -1,5 +1,7 @@
 import supabase from "../Config/supabaseClient.js";
 import { generateOtp } from "../Utils/generateOtp.js";
+/* --------------------------- USER LOGIN --------------------------- */
+import jwt from "jsonwebtoken";
 
 /* --------------------------- USER SIGNUP --------------------------- */
 export const userSignup = async (req, res) => {
@@ -25,23 +27,42 @@ export const userSignup = async (req, res) => {
   }
 };
 
-/* --------------------------- USER LOGIN --------------------------- */
+/* --------------------------- USER LOGIN (COOKIE AUTH) --------------------------- */
 export const userLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
     const { data, error } = await supabase.auth.signInWithPassword({
       email,
-      password
+      password,
     });
 
     if (error) return res.status(400).json({ error: error.message });
 
+    const user = data.user;
+
+    // Create our own JWT
+    const token = jwt.sign(
+      {
+        id: user.id,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" } // user stays logged in for 7 days
+    );
+
+    res.cookie("cinera_auth", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict", 
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+
     return res.json({
       success: true,
-      access_token: data.session.access_token,
-      refresh_token: data.session.refresh_token,
-      user: data.user
+      message: "Login successful",
+      user,
     });
 
   } catch (err) {
@@ -49,6 +70,7 @@ export const userLogin = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 /* --------------------------- SEND RESET OTP --------------------------- */
 export const sendResetOtp = async (req, res) => {
@@ -132,5 +154,17 @@ export const verifyOtpAndReset = async (req, res) => {
     console.error("verifyOtpAndReset error:", err);
     res.status(500).json({ error: "Internal Server Error" });
   }
+};
+
+/* --------------------------- Logout --------------------------- */
+
+export const logoutUser = (req, res) => {
+  res.clearCookie("cinera_auth", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
+  });
+
+  return res.json({ success: true, message: "Logged out" });
 };
 
