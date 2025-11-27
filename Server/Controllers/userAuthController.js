@@ -1,7 +1,7 @@
 import supabase from "../Config/supabaseClient.js";
 import { generateOtp } from "../Utils/generateOtp.js";
-/* --------------------------- USER LOGIN --------------------------- */
 import jwt from "jsonwebtoken";
+import { verifyGoogleToken } from "../Utils/verifyGoogleToken.js";
 
 /* --------------------------- USER SIGNUP --------------------------- */
 export const userSignup = async (req, res) => {
@@ -167,4 +167,65 @@ export const logoutUser = (req, res) => {
 
   return res.json({ success: true, message: "Logged out" });
 };
+
+/* --------------------------- GOOGLE LOGIN --------------------------- */
+export const googleLogin = async (req, res) => {
+  try {
+    const { id_token } = req.body;
+
+    if (!id_token) {
+      return res.status(400).json({ error: "Google ID token required" });
+    }
+
+    // 1️⃣ Verify Google Token
+    const payload = await verifyGoogleToken(id_token);
+    const { email, name, picture, sub } = payload;
+
+    // 2️⃣ Check if user exists in Supabase Auth
+    let { data: existingUser } = await supabase.auth.admin.listUsers();
+    existingUser = existingUser.users.find((u) => u.email === email);
+
+    let userId;
+
+    // 3️⃣ If user not found → create new user
+    if (!existingUser) {
+      const { data: newUser, error: createErr } =
+        await supabase.auth.admin.createUser({
+          email,
+          email_confirm: true,
+          user_metadata: {
+            name,
+            avatar: picture,
+            provider: "google",
+          },
+        });
+
+      if (createErr) throw createErr;
+      userId = newUser.user.id;
+    } else {
+      userId = existingUser.id;
+    }
+
+    // 4️⃣ Generate CINERA JWT
+    const token = jwt.sign(
+      { id: userId, email },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // 5️⃣ Send cookie
+    res.cookie("cinera_auth", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    return res.json({ success: true, message: "Google login successful" });
+  } catch (err) {
+    console.error("googleLogin error:", err);
+    return res.status(500).json({ error: "Google login failed" });
+  }
+};
+
 

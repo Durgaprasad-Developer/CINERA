@@ -1,6 +1,7 @@
 import express from "express";
 import { userSignup, userLogin, sendResetOtp, verifyOtpAndReset, logoutUser } from "../Controllers/userAuthController.js";
 import { verifyUser } from "../Middlewares/verifyUser.js";
+import { googleLogin } from "../Controllers/userAuthController.js";
 
 const router = express.Router();
 
@@ -9,6 +10,8 @@ router.post("/login", userLogin);
 router.post("/forgot-password", sendResetOtp);
 router.post("/reset-password", verifyOtpAndReset);
 router.post("/logout", logoutUser);
+router.post("/google", googleLogin);
+
 
 // any protected user actions:
 router.get("/profile", verifyUser, (req, res) => {
