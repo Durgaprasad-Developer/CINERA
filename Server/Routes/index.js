@@ -9,6 +9,7 @@ import analyticsRoutes from "./analyticsRoutes.js";
 import historyRoutes from './userHistoryRoutes.js';
 import favoritesRoutes from './userFavoritesRoutes.js'
 import recommendationRoutes from './recommendationRoutes.js'
+import homeRoutes from './homeRoutes.js'
 
 
 
@@ -24,6 +25,8 @@ router.use("/analytics", analyticsRoutes);
 router.use('/user/history', historyRoutes);
 router.use("/user/favorites", favoritesRoutes);
 router.use("/recommendations", recommendationRoutes);
+router.use("/home", homeRoutes);
+
 
 
 
