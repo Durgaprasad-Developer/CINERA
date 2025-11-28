@@ -14,4 +14,5 @@ router.get("/popular", verifyUser, getPopular);
 router.get("/recent", verifyUser, getRecent);
 router.get("/genre/:genre", verifyUser, getByGenre);
 
+
 export default router;

@@ -10,6 +10,7 @@ import historyRoutes from './userHistoryRoutes.js';
 import favoritesRoutes from './userFavoritesRoutes.js'
 import recommendationRoutes from './recommendationRoutes.js'
 import homeRoutes from './homeRoutes.js'
+import searchRoutes from "./searchRoutes.js";
 
 
 
@@ -26,6 +27,8 @@ router.use('/user/history', historyRoutes);
 router.use("/user/favorites", favoritesRoutes);
 router.use("/recommendations", recommendationRoutes);
 router.use("/home", homeRoutes);
+router.use("/search", searchRoutes);
+
 
 
 
