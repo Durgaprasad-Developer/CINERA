@@ -6,6 +6,9 @@ import uploadRoutes from "./uploadRoutes.js";
 import streamRoutes from "./streamRoutes.js";
 import userRoutes from "./userRoutes.js";
 import analyticsRoutes from "./analyticsRoutes.js";
+import historyRoutes from './userHistoryRoutes.js';
+import favoritesRoutes from './userFavoritesRoutes.js'
+import recommendationRoutes from './recommendationRoutes.js'
 
 
 
@@ -18,6 +21,12 @@ router.use("/admin/upload", uploadRoutes);
 router.use("/stream", streamRoutes);
 router.use("/user", userRoutes);
 router.use("/analytics", analyticsRoutes);
+router.use('/user/history', historyRoutes);
+router.use("/user/favorites", favoritesRoutes);
+router.use("/recommendations", recommendationRoutes);
+
+
+
 
 
 
