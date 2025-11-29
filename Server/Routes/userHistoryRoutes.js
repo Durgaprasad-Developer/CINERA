@@ -4,7 +4,7 @@ import {
   saveProgress,
   getUserHistory,
   getProgressForContent,
-  getContinueWatching,
+  getContinueWatching
 } from "../Controllers/historyControllers.js";
 
 const router = express.Router();
@@ -13,5 +13,6 @@ router.post("/", verifyUser, saveProgress);
 router.get("/", verifyUser, getUserHistory);
 router.get("/continue", verifyUser, getContinueWatching);
 router.get("/:contentId", verifyUser, getProgressForContent);
+
 
 export default router;
