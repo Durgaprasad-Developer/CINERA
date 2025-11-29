@@ -21,6 +21,9 @@
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.1",
+    "node-cron": "^4.2.1",
+    "razorpay": "^2.9.6",
+    "resend": "^6.5.2",
     "supabase": "^2.58.5"
   },
   "devDependencies": {

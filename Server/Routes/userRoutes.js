@@ -1,7 +1,6 @@
 import express from "express";
-import { userSignup, userLogin, sendResetOtp, verifyOtpAndReset, logoutUser } from "../Controllers/userAuthController.js";
+import { userSignup, userLogin, sendResetOtp, verifyOtpAndReset, logoutUser, googleLogin } from "../Controllers/userAuthController.js";
 import { verifyUser } from "../Middlewares/verifyUser.js";
-import { googleLogin } from "../Controllers/userAuthController.js";
 
 const router = express.Router();
 

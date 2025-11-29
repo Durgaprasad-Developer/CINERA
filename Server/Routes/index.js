@@ -11,6 +11,8 @@ import favoritesRoutes from './userFavoritesRoutes.js'
 import recommendationRoutes from './recommendationRoutes.js'
 import homeRoutes from './homeRoutes.js'
 import searchRoutes from "./searchRoutes.js";
+import notificationRoutes from "./notificationRoutes.js"
+import billingRoutes from "./billingRoutes.js"
 
 
 
@@ -28,6 +30,10 @@ router.use("/user/favorites", favoritesRoutes);
 router.use("/recommendations", recommendationRoutes);
 router.use("/home", homeRoutes);
 router.use("/search", searchRoutes);
+router.use("/notifications", notificationRoutes);
+router.use("/billing", billingRoutes);
+
+
 
 
 

@@ -2,21 +2,20 @@ import supabase from "../Config/supabaseClient.js";
 
 export const trackEvent = async (req, res) => {
   try {
-    const { content_id, event_type, user_id } = req.body;
+    const { content_id, event_type } = req.body;
+    const user_id = req.user?.id || null;
 
     if (!content_id || !event_type) {
-      return res.status(400).json({ error: "content_id and event_type required" });
+      return res.status(400).json({ error: "content_id & event_type required" });
     }
 
-    const { error } = await supabase
-      .from("analytics")
-      .insert([
-        {
-          content_id,
-          event_type,
-          user_id: user_id || null
-        }
-      ]);
+    const { error } = await supabase.from("analytics").insert([
+      {
+        content_id,
+        event_type,
+        user_id
+      }
+    ]);
 
     if (error) throw error;
 

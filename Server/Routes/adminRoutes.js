@@ -1,19 +1,21 @@
-import express from 'express';
-import { verifyAdmin } from '../Middlewares/verifyAdmin.js';
-import { getAdminStats } from "../Controllers/adminDashboardControllers.js";
-import { createGenre, getGenres, deleteGenre } from '../Controllers/genreControllers.js';
-
-
+import express from "express";
+import { verifyAdmin } from "../Middlewares/verifyAdmin.js";
+import { getAdminDashboard } from "../Controllers/adminDashboardControllers.js";
+import { createGenre, getGenres, deleteGenre } from "../Controllers/genreControllers.js";
 
 const router = express.Router();
 
-router.get('/status', verifyAdmin, async (req, res) => {
-  return res.json({ ok: true, admin: req.admin });
+// Admin check
+router.get("/status", verifyAdmin, (req, res) => {
+  res.json({ ok: true });
 });
-router.get("/stats", verifyAdmin, getAdminStats);
+
+// Full analytics dashboard
+router.get("/dashboard", verifyAdmin, getAdminDashboard);
+
+// Genres
 router.post("/genres", verifyAdmin, createGenre);
 router.get("/genres", verifyAdmin, getGenres);
 router.delete("/genres/:id", verifyAdmin, deleteGenre);
-
 
 export default router;
