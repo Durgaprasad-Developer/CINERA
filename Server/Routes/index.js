@@ -13,6 +13,7 @@ import homeRoutes from './homeRoutes.js'
 import searchRoutes from "./searchRoutes.js";
 import notificationRoutes from "./notificationRoutes.js"
 import billingRoutes from "./billingRoutes.js"
+import adminPlansRoutes from "./adminPlansRoutes.js"
 
 
 
@@ -32,6 +33,7 @@ router.use("/home", homeRoutes);
 router.use("/search", searchRoutes);
 router.use("/notifications", notificationRoutes);
 router.use("/billing", billingRoutes);
+router.use("/admin/plans", adminPlansRoutes)
 
 
 

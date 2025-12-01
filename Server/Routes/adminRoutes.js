@@ -17,5 +17,4 @@ router.get("/dashboard", verifyAdmin, getAdminDashboard);
 router.post("/genres", verifyAdmin, createGenre);
 router.get("/genres", verifyAdmin, getGenres);
 router.delete("/genres/:id", verifyAdmin, deleteGenre);
-
 export default router;
