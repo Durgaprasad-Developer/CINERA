@@ -7,7 +7,8 @@ import {
   getSubscriptionStatus,
   createPaymentLink,
   getPaymentHistory,
-  razorpayWebhook
+  razorpayWebhook,
+  getUserPlans
 } from "../Controllers/billingController.js";
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.post("/create-payment-link", verifyUser, createPaymentLink);
 
 // webhook: Razorpay will POST here. This must be unprotected and use raw body parser in server setup.
 router.post("/webhook/razorpay", razorpayWebhook);
+router.get("/", verifyUser, getUserPlans);
 
 
 export default router;

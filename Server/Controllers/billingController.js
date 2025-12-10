@@ -3,6 +3,25 @@ import supabase from "../Config/supabaseClient.js";
 import { razorpay } from "../Config/razorpayClient.js";
 import crypto from "crypto";
 
+/* ---------------- GET ORDER ---------------- */
+export const getUserPlans = async (req, res) => {
+  try {
+    const { data, error } = await supabase
+      .from("plans")
+      .select("id, name, price, duration_days");
+
+    if (error) throw error;
+
+    return res.json({
+      success: true,
+      plans: data
+    });
+  } catch (err) {
+    console.error("getUserPlans error:", err);
+    return res.status(500).json({ error: "Failed to fetch plans" });
+  }
+};
+
 /* ---------------- CREATE ORDER ---------------- */
 export const createOrder = async (req, res) => {
   try {
