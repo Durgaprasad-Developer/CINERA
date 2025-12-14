@@ -1,42 +1,77 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import AppLayout from "../components/layout/AppLayout";
+import Login from "../features/auth/pages/Login";
+import Signup from "../features/auth/pages/Signup";
+import ForgotPassword from "../features/auth/pages/ForgotPassword";
+import ResetPassword from "../features/auth/pages/ResetPassword";
+
+
 
 function ProtectedRoute({ children }) {
   const token = localStorage.getItem("cinera_token");
   return token ? children : <Navigate to="/login" />;
 }
 
-function AdminRoute({ children }) {
-  const role = localStorage.getItem("cinera_role");
-  return role === "admin" ? children : <Navigate to="/admin/login" />;
+function PublicRoute({ children }) {
+  const token = localStorage.getItem("cinera_token");
+  return token ? <Navigate to="/" /> : children;
 }
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Auth */}
-        <Route path="/login" element={<div>Login</div>} />
-        <Route path="/signup" element={<div>Signup</div>} />
-
-        {/* User protected pages */}
+        {/* Auth routes */}
         <Route
-          path="/"
+          path="/login"
+          element={
+            <PublicRoute>
+              <Login />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <Signup />
+            </PublicRoute>
+          }
+        />
+
+        <Route
+  path="/forgot-password"
+  element={
+    <PublicRoute>
+      <ForgotPassword />
+    </PublicRoute>
+  }
+/>
+
+<Route
+  path="/reset-password"
+  element={
+    <PublicRoute>
+      <ResetPassword />
+    </PublicRoute>
+  }
+/>
+
+
+        {/* App layout + protected routes */}
+        <Route
           element={
             <ProtectedRoute>
-              <div>Home</div>
+              <AppLayout />
             </ProtectedRoute>
           }
-        />
-
-        {/* Admin */}
-        <Route
-          path="/admin"
-          element={
-            <AdminRoute>
-              <div>Admin Dashboard</div>
-            </AdminRoute>
-          }
-        />
+        >
+          <Route path="/" element={<div>Home</div>} />
+          <Route path="/search" element={<div>Search</div>} />
+          <Route path="/notifications" element={<div>Notifications</div>} />
+          <Route path="/profile" element={<div>Profile</div>} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );
