@@ -4,6 +4,8 @@ import Login from "../features/auth/pages/Login";
 import Signup from "../features/auth/pages/Signup";
 import ForgotPassword from "../features/auth/pages/ForgotPassword";
 import ResetPassword from "../features/auth/pages/ResetPassword";
+import HomePage from "../features/home/pages/HomePage";
+import ContentCard from "../components/common/ContentCard";
 
 
 
@@ -67,7 +69,8 @@ export default function AppRouter() {
             </ProtectedRoute>
           }
         >
-          <Route path="/" element={<div>Home</div>} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/content/:id" element={<ContentCard />} />
           <Route path="/search" element={<div>Search</div>} />
           <Route path="/notifications" element={<div>Notifications</div>} />
           <Route path="/profile" element={<div>Profile</div>} />

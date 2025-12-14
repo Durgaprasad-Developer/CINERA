@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import AppRouter from "./app/route.jsx";
+import AppRouter from "./app/router.jsx";
 import Providers from "./app/providers";
 import { useAuth } from "./features/auth/hooks/useAuth";
 
