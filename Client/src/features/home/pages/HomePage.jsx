@@ -1,5 +1,6 @@
 import Row from "../../../components/common/Row";
 import { useHomeData } from "../hooks/useHomeData";
+import { useFavorites } from "../../favorites/hooks/useFavorites";
 
 export default function HomePage() {
   const {
@@ -11,8 +12,13 @@ export default function HomePage() {
     becauseYouWatched,
   } = useHomeData();
 
+  const {favorites} = useFavorites();
+
   return (
     <div className="pb-10">
+      {favorites.data?.data?.length>0 && (
+        <Row title="My List" data={favorites.data.data} isLoading={favorites.isLoading} />
+      )}
       <Row
         title="Continue Watching"
         data={continueWatching.data?.data}

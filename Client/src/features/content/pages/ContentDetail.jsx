@@ -6,6 +6,8 @@ import {
   getContentById,
   getSimilarContent,
 } from "../api/contentApi";
+import { useFavorites } from "../../favorites/hooks/useFavorites";
+
 
 export default function ContentDetail() {
   const { id } = useParams();
@@ -27,6 +29,22 @@ export default function ContentDetail() {
 
   const content = data.data;
 
+  const {
+    likes,
+    favorites,
+    like,
+    unlike,
+    addFavorite,
+    removeFavorite,
+  } = useFavorites();
+
+  const isLiked = likes.data?.data.some(
+    (item) => item.id === content.id
+  );
+
+  const isFavorite = favorites.data?.data?.some(
+    (item) => item.id === content.id
+  )
   return (
     <div className="px-6 pb-10">
       {/* HERO */}
@@ -47,14 +65,33 @@ export default function ContentDetail() {
           </p>
 
           <div className="flex gap-4">
-            <Button onClick={() => navigate(`/player/${id}`)}>
-              ▶ Play
-            </Button>
+  <Button onClick={() => navigate(`/player/${id}`)}>
+    ▶ Play
+  </Button>
 
-            <Button variant="secondary">
-              + My List
-            </Button>
-          </div>
+  <Button
+    variant="secondary"
+    onClick={() =>
+      isFavorite
+        ? removeFavorite.mutate(id)
+        : addFavorite.mutate(id)
+    }
+  >
+    {isFavorite ? "✓ In My List" : "+ My List"}
+  </Button>
+
+  <Button
+    variant="ghost"
+    onClick={() =>
+      isLiked
+        ? unlike.mutate(id)
+        : like.mutate(id)
+    }
+  >
+    {isLiked ? "❤️ Liked" : "🤍 Like"}
+  </Button>
+</div>
+
         </div>
       </div>
 

@@ -6,6 +6,8 @@ import ForgotPassword from "../features/auth/pages/ForgotPassword";
 import ResetPassword from "../features/auth/pages/ResetPassword";
 import HomePage from "../features/home/pages/HomePage";
 import ContentCard from "../components/common/ContentCard";
+import Player from "../features/player/pages/Player";
+import MyList from "../features/favorites/pages/MyList";
 
 
 
@@ -71,6 +73,8 @@ export default function AppRouter() {
         >
           <Route path="/" element={<HomePage />} />
           <Route path="/content/:id" element={<ContentCard />} />
+          <Route path="/player/:id" element={<Player />} />
+          <Route path="/my-list" element={<MyList />} />
           <Route path="/search" element={<div>Search</div>} />
           <Route path="/notifications" element={<div>Notifications</div>} />
           <Route path="/profile" element={<div>Profile</div>} />

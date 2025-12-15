@@ -2,7 +2,7 @@ import {useParams} from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {useRef} from "react";
 import { getSteamUrl } from "../api/playerApi";
-import {useProgress} from "../hooks/useUserProgress";
+import {useProgress} from "../hooks/useProgress";
 
 export default function Player() {
     const {id} = useParams();

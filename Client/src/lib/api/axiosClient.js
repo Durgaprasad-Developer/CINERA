@@ -1,8 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "https://cinera.onrender.com",
-  withCredentials: true,
+  baseURL: "https://cinera.onrender.com/api",
 });
 
 // Inject JWT token
@@ -14,7 +13,6 @@ axiosClient.interceptors.request.use((config) => {
   return config;
 });
 
-// Handle 401 auto logout
 axiosClient.interceptors.response.use(
   (res) => res,
   (error) => {
