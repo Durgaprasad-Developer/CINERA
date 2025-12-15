@@ -185,7 +185,7 @@ export const verifyOtpAndReset = async (req, res) => {
 
 /* --------------------------- Logout --------------------------- */
 export const logoutUser = (req, res) => {
-  res.clearCookie("cinera_auth", {
+  res.clearCookie("token", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -241,7 +241,7 @@ export const googleLogin = async (req, res) => {
     );
 
     // 5️⃣ Send cookie
-    res.cookie("cinera_auth", token, {
+    res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "none",
