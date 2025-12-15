@@ -31,7 +31,17 @@ app.post(
    2️⃣ NORMAL MIDDLEWARES (AFTER RAW PARSER)
 ------------------------------------------ */
 app.use(helmet());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://cinera.onrender.com", // if frontend is same domain
+      // add Vercel domain if frontend is there
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('tiny'));
