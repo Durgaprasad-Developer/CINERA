@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 
 export const verifyUser = (req, res, next) => {
   try {
-    const token = req.cookies.cinera_auth;
+    const token = req.cookies.token;
 
     if (!token) {
       return res.status(401).json({ error: "Not authenticated" });

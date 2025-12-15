@@ -186,10 +186,10 @@ export const verifyOtpAndReset = async (req, res) => {
 /* --------------------------- Logout --------------------------- */
 export const logoutUser = (req, res) => {
   res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+});
 
   return res.json({ success: true, message: "Logged out" });
 };
