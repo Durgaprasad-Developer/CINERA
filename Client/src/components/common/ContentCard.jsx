@@ -7,11 +7,14 @@ export default function ContentCard({ item }) {
   // 🔐 SAFETY GUARD (MOST IMPORTANT)
   if (!item) return null;
 
-  const thumbnailUrl = item.thumbnail
-    ? item.thumbnail.startsWith("http")
-      ? item.thumbnail
-      : `https://cinera.onrender.com/${item.thumbnail}`
-    : "/placeholder.png";
+  const thumbnailUrl = item.thumbnail?
+    `https://mxyupktvetbubpufsjli.storage.supabase.co/storage/v1/object/public/${item.thumbnail}`
+  : "/placeholder.png";
+
+
+// https://mxyupktvetbubpufsjli.storage.supabase.co/storage/v1/s3
+// console.log("Thumbnail URL:", thumbnailUrl);
+
 
   return (
     <motion.div
