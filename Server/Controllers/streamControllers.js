@@ -6,7 +6,7 @@ export const getSignedStreamUrl = async (req, res, next) => {
     const { id } = req.params;
 
     // TEMPORARY (until we build user auth)
-    const userId = null;  // or a hardcoded UUID for testing analytics
+    const userId = req.user.id;  // or a hardcoded UUID for testing analytics
 
     // Track analytics (view event)
     trackEvent(userId, id, "view");
