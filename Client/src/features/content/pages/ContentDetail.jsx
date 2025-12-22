@@ -73,9 +73,11 @@ console.log("🆔 useParams id:", id);
       {similar.length > 0 && (
         <div className="mt-8">
           <ContentRow
-            title="More Like This"
-            items={similar}
-          />
+  title="More Like This"
+  data={similar}
+  isLoading={false}
+/>
+
         </div>
       )}
     </div>
