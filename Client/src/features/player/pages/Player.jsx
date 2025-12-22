@@ -1,36 +1,41 @@
-import {useParams} from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import {useRef} from "react";
-import { getSteamUrl } from "../api/playerApi";
-import {useProgress} from "../hooks/useProgress";
+import { getStreamUrl } from "../api/playerApi";
 
-export default function Player() {
-    const {id} = useParams();
-    const playerRef = useRef(null);
+export default function PlayerPage() {
+  const { id } = useParams();
 
-    const { data, isLoading } = useQuery({
-        queryKey: ["stream", id],
-        qyeryFn: () => getSteamUrl(id),
-    });
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["stream", id],
+    queryFn: () => getStreamUrl(id),
+  });
 
-    useProgress({
-        contentId: id,
-        playerRef,
-    });
-
-    if(isLoading){
-        return(
-            <div className="min-h-screen flex items-center justify-center text-white">
-                Loading player...
-            </div>
-        );
-    }
-
-    const streamUrl = data.data.url;
-
+  if (isLoading) {
     return (
-        <div className="min-h-screen bg-black flex items-center justify-center">
-            <video ref={playerRef} src={streamUrl} controls autoplay className="w-full max-w-5xl rounded-lg"/>
-        </div>
-    )
+      <div className="bg-black min-h-screen flex items-center justify-center text-gray-400">
+        Loading video...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-black min-h-screen flex items-center justify-center text-red-500">
+        Failed to load video
+      </div>
+    );
+  }
+
+  const streamUrl = data.data.streamUrl;
+
+  return (
+    <div className="bg-black min-h-screen flex flex-col">
+      <video
+        src={streamUrl}
+        controls
+        autoPlay
+        className="w-full h-full max-h-screen bg-black"
+      />
+    </div>
+  );
 }

@@ -8,12 +8,15 @@ export default function ContentCard({ item }) {
   if (!item) return null;
 
   const thumbnailUrl = item.thumbnail?
-    `https://mxyupktvetbubpufsjli.storage.supabase.co/storage/v1/object/public/${item.thumbnail}`
+    `https://mxyupktvetbubpufsjli.supabase.co/storage/v1/object/public/${item.thumbnail}`
   : "/placeholder.png";
 
 
-// https://mxyupktvetbubpufsjli.storage.supabase.co/storage/v1/s3
-// console.log("Thumbnail URL:", thumbnailUrl);
+
+console.log("Thumbnail URL:", thumbnailUrl, "for item:", item);
+
+
+
 
 
   return (
