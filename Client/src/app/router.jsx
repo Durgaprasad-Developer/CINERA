@@ -9,6 +9,7 @@ import ContentCard from "../components/common/ContentCard";
 import Player from "../features/player/pages/Player";
 import MyList from "../features/favorites/pages/MyList";
 import SearchPage from "../features/search/pages/SearchPage";
+import ContentDetail from "../features/content/pages/ContentDetail";
 
 
 
@@ -74,7 +75,8 @@ export default function AppRouter() {
           }
         >
           <Route path="/" element={<HomePage />} />
-          <Route path="/content/:id" element={<ContentCard />} />
+          {/* <Route path="/content/:id" element={<ContentCard />} /> */}
+          <Route path="/content/:id" element={<ContentDetail />} />
           <Route path="/player/:id" element={<Player />} />
           <Route path="/my-list" element={<MyList />} />
           <Route path="/search" element={<SearchPage />} />

@@ -1,108 +1,83 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import Button from "../../../components/ui/Button";
-import Row from "../../../components/common/Row";
-import {
-  getContentById,
-  getSimilarContent,
-} from "../api/contentApi";
-import { useFavorites } from "../../favorites/hooks/useFavorites";
-
+import { useContentDetail } from "../hooks/useContentDetail";
+import ContentRow from "../../../components/common/Row";
 
 export default function ContentDetail() {
   const { id } = useParams();
+  console.log("🔥 ContentDetail mounted");
+console.log("🆔 useParams id:", id);
+
   const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["content", id],
-    queryFn: () => getContentById(id),
-  });
+  const {
+    content,
+    similar,
+    loading,
+    error,
+  } = useContentDetail(id);
 
-  const similar = useQuery({
-    queryKey: ["similar", id],
-    queryFn: () => getSimilarContent(id),
-  });
-
-  if (isLoading) {
-    return <div className="p-6 text-white">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="text-white p-8">
+        Loading...
+      </div>
+    );
   }
 
-  const content = data.data;
+  if (error || !content) {
+    return (
+      <div className="text-white p-8">
+        Content not found
+      </div>
+    );
+  }
 
-  const {
-    likes,
-    favorites,
-    like,
-    unlike,
-    addFavorite,
-    removeFavorite,
-  } = useFavorites();
-
-  const isLiked = likes.data?.data.some(
-    (item) => item.id === content.id
-  );
-
-  const isFavorite = favorites.data?.data?.some(
-    (item) => item.id === content.id
-  )
   return (
-    <div className="px-6 pb-10">
-      {/* HERO */}
-      <div className="flex flex-col md:flex-row gap-8 mt-6">
-        <img
-          src={content.thumbnail}
-          alt={content.title}
-          className="w-full md:w-72 rounded-xl"
-        />
+    <div className="min-h-screen bg-black text-white">
+      {/* HERO SECTION */}
+      <div
+        className="relative h-[70vh] bg-cover bg-center"
+        style={{
+          backgroundImage: `url(${content.thumbnail})`,
+        }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
 
-        <div>
-          <h1 className="text-3xl font-bold mb-4">
+        <div className="absolute bottom-10 left-10 max-w-xl">
+          <h1 className="text-4xl font-bold mb-4">
             {content.title}
           </h1>
 
-          <p className="text-gray-300 mb-6 max-w-2xl">
+          <p className="text-gray-300 mb-6">
             {content.description}
           </p>
 
           <div className="flex gap-4">
-  <Button onClick={() => navigate(`/player/${id}`)}>
-    ▶ Play
-  </Button>
+            {/* PLAY */}
+            <button
+              onClick={() => navigate(`/player/${content.id}`)}
+              className="bg-white text-black px-6 py-3 rounded font-semibold hover:bg-gray-300"
+            >
+              ▶ Play
+            </button>
 
-  <Button
-    variant="secondary"
-    onClick={() =>
-      isFavorite
-        ? removeFavorite.mutate(id)
-        : addFavorite.mutate(id)
-    }
-  >
-    {isFavorite ? "✓ In My List" : "+ My List"}
-  </Button>
-
-  <Button
-    variant="ghost"
-    onClick={() =>
-      isLiked
-        ? unlike.mutate(id)
-        : like.mutate(id)
-    }
-  >
-    {isLiked ? "❤️ Liked" : "🤍 Like"}
-  </Button>
-</div>
-
+            {/* MY LIST (later) */}
+            <button className="bg-gray-700 px-6 py-3 rounded">
+              + My List
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* SIMILAR */}
-      <div className="mt-12">
-        <Row
-          title="More Like This"
-          data={similar.data?.data}
-          isLoading={similar.isLoading}
-        />
-      </div>
+      {/* SIMILAR CONTENT */}
+      {similar.length > 0 && (
+        <div className="mt-8">
+          <ContentRow
+            title="More Like This"
+            items={similar}
+          />
+        </div>
+      )}
     </div>
   );
 }

@@ -6,6 +6,7 @@ export default function ContentCard({ item }) {
 
   // 🔐 SAFETY GUARD (MOST IMPORTANT)
   if (!item) return null;
+  
 
   const thumbnailUrl = item.thumbnail?
     `https://mxyupktvetbubpufsjli.supabase.co/storage/v1/object/public/${item.thumbnail}`
@@ -13,7 +14,7 @@ export default function ContentCard({ item }) {
 
 
 
-console.log("Thumbnail URL:", thumbnailUrl, "for item:", item);
+// console.log("Thumbnail URL:", thumbnailUrl, "for item:", item);
 
 
 

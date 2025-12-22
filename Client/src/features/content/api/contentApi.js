@@ -1,7 +1,14 @@
+// features/content/api/contentApi.js
 import axiosClient from "../../../lib/api/axiosClient";
 
-export const getContentById = (id) =>
-  axiosClient.get(`/content/${id}`);
+export const getContentById = async (id) => {
+  const res = await axiosClient.get(`/user/content/${id}`);
+  return res.data.data;
+};
 
-export const getSimilarContent = (id) =>
-  axiosClient.get(`/recommendations/content/${id}/similar`);
+export const getSimilarContent = async (id) => {
+  const res = await axiosClient.get(
+    `/recommendations/content/${id}/similar`
+  );
+  return res.data.data || [];
+};
