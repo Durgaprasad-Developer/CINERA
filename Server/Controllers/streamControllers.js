@@ -16,6 +16,7 @@ export const getSignedStreamUrl = async (req, res, next) => {
       .from("content")
       .select("storage_path")
       .eq("id", id)
+      .eq("published", true)
       .single();
 
     if (contentErr || !content) {
