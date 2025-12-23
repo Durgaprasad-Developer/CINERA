@@ -40,27 +40,39 @@ export const getSignedStreamUrl = async (req, res, next) => {
       return res.status(400).json({ error: "Invalid storage path" });
     }
 
-    // Signed streaming URL (1 hour)
-    const { data, error } = await supabase.storage
-      .from(bucketName)
-      .createSignedUrl(finalPath, 60 * 60);
+  // Signed streaming URL (1 hour)
+const { data, error } = await supabase.storage
+  .from(bucketName)
+  .createSignedUrl(finalPath, 60 * 60);
 
-    if (error) {
-      console.error("Supabase storage error:", {
-        bucketName,
-        finalPath,
-        message: error.message,
-      });
+// 🔍 CRITICAL STREAM DEBUG LOG
+console.log("🎥 STREAM DEBUG", {
+  time: new Date().toISOString(),
+  contentId: id,
+  bucketName,
+  finalPath,
+  hasError: !!error,
+  signedUrlExists: !!data?.signedUrl,
+  signedUrlPreview: data?.signedUrl?.slice(0, 80), // safe preview
+});
 
-      return res.status(404).json({
-        error: "Video not available",
-      });
-    }
+if (error) {
+  console.error("❌ STREAM SIGN ERROR", {
+    message: error.message,
+    bucketName,
+    finalPath,
+  });
 
-    return res.json({
-      success: true,
-      streamUrl: data.signedUrl,
-    });
+  return res.status(404).json({
+    error: "Video not available",
+  });
+}
+
+return res.json({
+  success: true,
+  streamUrl: data.signedUrl,
+});
+
 
   } catch (err) {
     console.error("getSignedStreamUrl fatal error:", err);
