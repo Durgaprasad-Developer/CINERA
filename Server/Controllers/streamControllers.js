@@ -1,21 +1,18 @@
 import supabase from "../Config/supabaseClient.js";
+import { createServiceSupabaseClient } from "../Utils/supabaseServiceClient.js";
 import { trackEvent } from "../Utils/trackAnalytics.js";
 
-export const getSignedStreamUrl = async (req, res, next) => {
+export const getSignedStreamUrl = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ✅ SAFE user handling (auth will NOT crash streaming)
     const userId = req.user?.id ?? "anonymous";
 
-    // Track analytics (non-blocking)
     try {
       trackEvent(userId, id, "view");
-    } catch (e) {
-      console.warn("Analytics failed:", e.message);
-    }
+    } catch {}
 
-    // Fetch content from DB
+    // ✅ DB access uses shared client
     const { data: content, error: contentErr } = await supabase
       .from("content")
       .select("storage_path")
@@ -28,11 +25,8 @@ export const getSignedStreamUrl = async (req, res, next) => {
     }
 
     const filePath = content.storage_path;
-
-    // 🔍 Log once for observability
     console.log("[STREAM]", { id, filePath });
 
-    // SAME logic you had
     const [bucketName, ...fileParts] = filePath.split("/");
     const finalPath = fileParts.join("/");
 
@@ -40,21 +34,16 @@ export const getSignedStreamUrl = async (req, res, next) => {
       return res.status(400).json({ error: "Invalid storage path" });
     }
 
-    // Signed streaming URL (1 hour)
-    const { data, error } = await supabase.storage
+    // ✅ STORAGE uses fresh client
+    const serviceSupabase = createServiceSupabaseClient();
+
+    const { data, error } = await serviceSupabase.storage
       .from(bucketName)
       .createSignedUrl(finalPath, 60 * 60);
 
     if (error) {
-      console.error("Supabase storage error:", {
-        bucketName,
-        finalPath,
-        message: error.message,
-      });
-
-      return res.status(404).json({
-        error: "Video not available",
-      });
+      console.error("Supabase storage error:", error.message);
+      return res.status(404).json({ error: "Video not available" });
     }
 
     return res.json({
@@ -64,8 +53,6 @@ export const getSignedStreamUrl = async (req, res, next) => {
 
   } catch (err) {
     console.error("getSignedStreamUrl fatal error:", err);
-    return res.status(500).json({
-      error: "Streaming failed",
-    });
+    return res.status(500).json({ error: "Streaming failed" });
   }
 };
