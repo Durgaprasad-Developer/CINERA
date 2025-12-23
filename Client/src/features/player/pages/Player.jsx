@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getStreamUrl } from "../api/playerApi";
-
 import { useEffect } from "react";
 
 export default function PlayerPage() {
@@ -12,6 +11,20 @@ export default function PlayerPage() {
     queryFn: () => getStreamUrl(id),
   });
 
+  // ✅ SAFE access (no crash on first render)
+  const streamUrl = data?.data?.streamUrl;
+
+  // ✅ HOOK MUST BE HERE (TOP LEVEL)
+  useEffect(() => {
+    if (streamUrl) {
+      console.log("🎬 VIDEO SRC SET", {
+        time: new Date().toISOString(),
+        streamUrlPreview: streamUrl.slice(0, 80),
+      });
+    }
+  }, [streamUrl]);
+
+  // ✅ RETURNS ONLY AFTER ALL HOOKS
   if (isLoading) {
     return (
       <div className="bg-black min-h-screen flex items-center justify-center text-gray-400">
@@ -27,18 +40,6 @@ export default function PlayerPage() {
       </div>
     );
   }
-
-  const streamUrl = data.data.streamUrl;
-
-  useEffect(() => {
-  if (streamUrl) {
-    console.log("🎬 VIDEO SRC SET", {
-      time: new Date().toISOString(),
-      streamUrlPreview: streamUrl.slice(0, 80),
-    });
-  }
-}, [streamUrl]);
-
 
   return (
     <div className="bg-black min-h-screen flex flex-col">
