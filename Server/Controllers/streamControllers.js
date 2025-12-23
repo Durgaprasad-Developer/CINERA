@@ -1,3 +1,4 @@
+import supabase from "../Config/supabaseClient.js";
 import { trackEvent } from "../Utils/trackAnalytics.js";
 
 export const getSignedStreamUrl = async (req, res, next) => {
