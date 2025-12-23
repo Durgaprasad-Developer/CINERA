@@ -1,21 +1,18 @@
 import supabase from "../Config/supabaseClient.js";
+import storageSupabase from "../Config/storageSupabase.js";
 import { trackEvent } from "../Utils/trackAnalytics.js";
 
-export const getSignedStreamUrl = async (req, res, next) => {
+export const getSignedStreamUrl = async (req, res) => {
   try {
     const { id } = req.params;
 
-    // ✅ SAFE user handling (auth will NOT crash streaming)
     const userId = req.user?.id ?? "anonymous";
 
-    // Track analytics (non-blocking)
     try {
       trackEvent(userId, id, "view");
-    } catch (e) {
-      console.warn("Analytics failed:", e.message);
-    }
+    } catch (e) { }
 
-    // Fetch content from DB
+    // 🔹 DB query still uses app client (SAFE)
     const { data: content, error: contentErr } = await supabase
       .from("content")
       .select("storage_path")
@@ -28,11 +25,8 @@ export const getSignedStreamUrl = async (req, res, next) => {
     }
 
     const filePath = content.storage_path;
-
-    // 🔍 Log once for observability
     console.log("[STREAM]", { id, filePath });
 
-    // SAME logic you had
     const [bucketName, ...fileParts] = filePath.split("/");
     const finalPath = fileParts.join("/");
 
@@ -40,44 +34,31 @@ export const getSignedStreamUrl = async (req, res, next) => {
       return res.status(400).json({ error: "Invalid storage path" });
     }
 
-  // Signed streaming URL (1 hour)
-const { data, error } = await supabase.storage
-  .from(bucketName)
-  .createSignedUrl(finalPath, 60 * 60);
+    // 🎯 SIGNED URL — STORAGE CLIENT ONLY
+    const { data, error } = await storageSupabase.storage
+      .from(bucketName)
+      .createSignedUrl(finalPath, 60 * 60);
 
-// 🔍 CRITICAL STREAM DEBUG LOG
-console.log("🎥 STREAM DEBUG", {
-  time: new Date().toISOString(),
-  contentId: id,
-  bucketName,
-  finalPath,
-  hasError: !!error,
-  signedUrlExists: !!data?.signedUrl,
-  signedUrlPreview: data?.signedUrl?.slice(0, 80), // safe preview
-});
+    console.log("🎥 STREAM DEBUG", {
+      time: new Date().toISOString(),
+      contentId: id,
+      bucketName,
+      finalPath,
+      signedUrlExists: !!data?.signedUrl,
+      error: error?.message,
+    });
 
-if (error) {
-  console.error("❌ STREAM SIGN ERROR", {
-    message: error.message,
-    bucketName,
-    finalPath,
-  });
+    if (error) {
+      return res.status(404).json({ error: "Video not available" });
+    }
 
-  return res.status(404).json({
-    error: "Video not available",
-  });
-}
-
-return res.json({
-  success: true,
-  streamUrl: data.signedUrl,
-});
-
+    return res.json({
+      success: true,
+      streamUrl: data.signedUrl,
+    });
 
   } catch (err) {
     console.error("getSignedStreamUrl fatal error:", err);
-    return res.status(500).json({
-      error: "Streaming failed",
-    });
+    return res.status(500).json({ error: "Streaming failed" });
   }
 };

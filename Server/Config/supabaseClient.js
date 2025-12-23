@@ -13,12 +13,6 @@ console.log("🔐 SUPABASE ENV CHECK", {
     : "MISSING",
 });
 
-console.log(
-  "🔐 SUPABASE KEY TYPE:",
-  SUPABASE_SERVICE_KEY?.startsWith("eyJ")
-    ? "ANON / PUBLIC ❌"
-    : "SERVICE_ROLE ✅"
-);
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   throw new Error("Missing SUPABASE env");
