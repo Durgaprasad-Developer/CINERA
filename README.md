@@ -1,6 +1,6 @@
 # 🎬 CINERA — Next-Gen AI-Powered Video Streaming Platform
 
-Welcome to **CINERA**, a comprehensive, enterprise-ready, modular video streaming platform. Engineered with a cutting-edge hybrid architecture, CINERA features secure media streaming via Supabase signed URLs, a sub-second AI recommendation engine utilizing Google Gemini vector embeddings, fully automated subscription billing through Razorpay, real-time platform analytics, and a bespoke administrator CMS.
+Welcome to **CINERA**, a comprehensive, enterprise-ready, modular video streaming platform. Engineered with a cutting-edge hybrid architecture, CINERA features secure media streaming via Supabase signed URLs, a sub-second AI recommendation engine utilizing Google Gemini vector embeddings, subscription billing through Razorpay *(Under Process)*, smart notifications *(Under Process)*, real-time platform analytics, and a bespoke administrator CMS.
 
 ---
 
@@ -30,16 +30,16 @@ graph TD
         Router[API Route Orchestrator] --> AuthMiddleware[Auth & Subscription Guards]
         Router --> ContentCtrl[Content Controller]
         Router --> RecommendCtrl[AI Recommendation Controller]
-        Router --> BillingCtrl[Razorpay Subscription Controller]
-        Router --> NotificationCtrl[Resend Email Controller]
+        Router --> BillingCtrl["Razorpay Subscription Controller (Under Process)"]
+        Router --> NotificationCtrl["Resend Email Controller (Under Process)"]
     end
 
     subgraph CoreServices [Data & AI Layer]
         SupabaseDB[Supabase DB / PostgreSQL]
         SupabaseStorage[Supabase Storage Buckets]
         GeminiAI[Google Gemini AI Embeddings]
-        Razorpay[Razorpay Gateway]
-        Resend[Resend Mail Service]
+        Razorpay["Razorpay Gateway (Under Process)"]
+        Resend["Resend Mail Service (Under Process)"]
     end
 
     %% Interactions
@@ -79,8 +79,8 @@ graph TD
 | **State Management** | Zustand | Ultra-lightweight, high-performance central store for frontend state. |
 | **Data Fetching** | TanStack React Query (v5) | Robust caching, synchronization, and automated UI state management. |
 | **AI / Machine Learning** | Google Gemini Embeddings | `text-embedding-004` generates dense semantic vector representations. |
-| **Payment Gateway** | Razorpay SDK | Enterprise subscription billing, orders, and secure webhook validation. |
-| **Email Delivery** | Resend API | Low-latency transactional and marketing email pipeline. |
+| **Payment Gateway** | Razorpay SDK *(Under Process)* | Enterprise subscription billing, orders, and secure webhook validation *(Under Process)*. |
+| **Email Delivery** | Resend API *(Under Process)* | Low-latency transactional and marketing email pipeline *(Under Process)*. |
 
 ---
 
@@ -92,7 +92,7 @@ CINERA/
 │   ├── src/
 │   │   ├── app/                 # Routing, Global Providers
 │   │   ├── components/          # Reusable Layouts & UI Components
-│   │   ├── features/            # Auth, Content, Search, History, Notifications, Billing, Player
+│   │   ├── features/            # Auth, Content, Search, History, Notifications (Under Process), Billing (Under Process), Player
 │   │   ├── lib/                 # Axios configurations and SDK wrappers
 │   │   └── styles/              # Global Tailwind styling configs
 │   ├── package.json
@@ -124,9 +124,9 @@ CINERA/
 
 1. **AI Recommendation System**: Generates embedding vectors for cinematic description metadata using **Google Gemini**. Executes cosine-similarity math inside Supabase via specialized Postgres functions (`RPC`) to fetch similar titles based on a movie or a user's tastes.
 2. **Secure signed-URL Video Streaming**: Restricts video access. Signed streaming URLs are dynamically generated with a 1-hour expiration limit, stopping direct resource extraction.
-3. **Enterprise Subscriptions (Razorpay)**: Integrates deep Razorpay subscription schemas with a reliable, raw-body parsed webhook handling system to process payment updates in real-time.
-4. **Platform-Wide CMS & Analytics**: Enables content publishers to upload movies, tag metadata, define custom subscription plans, manage genres, and inspect overall platform activity through real-time charts.
-5. **Smart Notifications & Transactional Emails**: Sends immediate transactional updates (such as passwords, plans, and receipts) using the **Resend API**.
+3. **Enterprise Subscriptions (Razorpay) [Under Process]**: Integrates deep Razorpay subscription schemas with a reliable, raw-body parsed webhook handling system to process payment updates in real-time.
+4. **Platform-Wide CMS & Analytics**: Enables content publishers to upload movies, tag metadata, define custom subscription plans *(Under Process)*, manage genres, and inspect overall platform activity through real-time charts.
+5. **Smart Notifications & Transactional Emails [Under Process]**: Sends transactional updates (such as passwords, plans, and receipts) using the **Resend API**.
 
 ---
 
@@ -153,10 +153,10 @@ JWT_EXPIRES_IN=2h
 GEMINI_API_KEY=<your-google-gemini-api-key>
 GOOGLE_CLIENT_ID=<your-google-oauth-client-id>
 
-# Transactional Emails
+# Transactional Emails (Under Process)
 RESEND_API_KEY=<your-resend-api-key>
 
-# Payments Integration
+# Payments Integration (Under Process)
 RAZORPAY_KEY_ID=<your-razorpay-key-id>
 RAZORPAY_KEY_SECRET=<your-razorpay-key-secret>
 RAZORPAY_WEBHOOK_SECRET=<your-razorpay-webhook-secret>
@@ -226,12 +226,12 @@ CINERA utilizes highly optimized Supabase PostgreSQL database tables and Remote 
 
 ### Required Tables
 - `content` — Movie metadata, duration, tags, embeddings vector.
-- `plans` — Platform-wide subscription pricing configurations.
-- `subscriptions` — User payment profiles, expiry dates, and billing states.
+- `plans` — Platform-wide subscription pricing configurations *(Under Process)*.
+- `subscriptions` — User payment profiles, expiry dates, and billing states *(Under Process)*.
 - `favorites` — User bookmark records.
 - `watch_history` — User progress tracking across videos.
 - `user_taste` — Dynamic user search behavior and interest markers.
-- `notifications` — In-app alerts queue.
+- `notifications` — In-app alerts queue *(Under Process)*.
 - `password_reset_codes` — Temporary secure keys for credential recovery.
 - `admins` — Credentials for dashboard operators.
 - `analytics` — Page views, interactions, and generic session metrics.
