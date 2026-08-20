@@ -56,8 +56,6 @@ app.use(
   })
 );
 
-// Explicitly handle preflight for all routes
-app.options('*', cors({ origin: (o, cb) => cb(null, allowedOrigins.includes(o) || !o), credentials: true }));
 
 app.use(helmet());
 
