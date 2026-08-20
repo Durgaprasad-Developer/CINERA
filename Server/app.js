@@ -5,7 +5,7 @@ import morgan from 'morgan';
 import routes from './Routes/index.js';
 import dotenv from 'dotenv';
 import cookieParser from "cookie-parser";
-import bodyParser from "body-parser";
+
 
 dotenv.config();
 
