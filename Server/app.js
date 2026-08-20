@@ -30,26 +30,36 @@ app.post(
 /* -----------------------------------------
    2️⃣ NORMAL MIDDLEWARES (AFTER RAW PARSER)
 ------------------------------------------ */
-app.use(helmet());
+
+// CORS must come BEFORE helmet so preflight OPTIONS responses
+// are sent with the correct headers before Helmet can interfere.
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:5173',
+  'http://localhost:3000',
+].filter(Boolean);
+
 app.use(
   cors({
     origin: (origin, callback) => {
       // allow requests with no origin (mobile apps, curl, server-to-server)
       if (!origin) return callback(null, true);
-
-      const allowedOrigins = [
-        process.env.FRONTEND_URL,
-      ];
-
       if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error(`CORS: origin '${origin}' not allowed`));
       }
     },
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie'],
   })
 );
+
+// Explicitly handle preflight for all routes
+app.options('*', cors({ origin: (o, cb) => cb(null, allowedOrigins.includes(o) || !o), credentials: true }));
+
+app.use(helmet());
 
 
 app.use(express.json());
