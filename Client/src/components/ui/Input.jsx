@@ -21,7 +21,7 @@ export default function Input({
       <div className="relative">
         <input
           type={isPassword && showPassword ? "text" : type}
-          className="bg-gray-800 text-white px-3 py-2 rounded-md outline-none focus:ring-2 focus:ring-red-600 pr-10 w-full"
+          className="bg-[#1A1A1D] border border-white/[0.08] text-white px-3 py-2.5 rounded-xl outline-none focus:border-white/30 transition-colors pr-10 w-full placeholder-[#6B6B7B]"
           {...props}
         />
 

@@ -4,9 +4,12 @@ import { Outlet } from "react-router-dom";
 
 export default function AppLayout() {
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div
+      className="min-h-screen flex flex-col"
+      style={{ background: "#0D0D0F", color: "#FFFFFF", fontFamily: "'Inter', sans-serif" }}
+    >
       <Navbar />
-      <main className="flex-1 pt-6">
+      <main className="flex-1">
         <Outlet />
       </main>
       <Footer />

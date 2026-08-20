@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Background Scale ─────────────────────────── */
+  --color-base:     #0D0D0F;   /* page background             */
+  --color-surface:  #1A1A1D;   /* cards, inputs, panels        */
+  --color-elevated: #242428;   /* hover states, dropdowns      */
+  --color-border:   rgba(255,255,255,0.08);
+
+  /* ── Text ────────────────────────────────────── */
+  --color-text-primary: #FFFFFF;
+  --color-text-muted:   #A8A8B3;
+  --color-text-subtle:  #6B6B7B;
+
+  /* ── Accent ──────────────────────────────────── */
+  --color-amber:    #E8B04B;   /* ratings/badges only — used sparingly */
+
+  /* ── Font ────────────────────────────────────── */
+  --font-sans: 'Inter', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  background-color: var(--color-base);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Scrollbar hiding ─────────────────────────── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

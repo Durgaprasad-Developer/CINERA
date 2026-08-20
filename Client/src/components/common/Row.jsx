@@ -2,32 +2,25 @@ import ContentCard from "./ContentCard";
 import Skeleton from "../ui/Skeleton";
 
 export default function Row({ title, data = [], isLoading }) {
-  // Defensive guard
-  if (!isLoading && !Array.isArray(data)) {
-    return null;
-  }
-
-  if (!isLoading && data.length === 0) {
-    return null;
-  }
+  if (!isLoading && (!Array.isArray(data) || data.length === 0)) return null;
 
   return (
-    <section className="mb-8">
-      <h2 className="text-xl font-semibold mb-4 px-6 text-white">
+    <section className="mb-2">
+      {/* Row title */}
+      <h2 className="text-sm font-semibold text-[#A8A8B3] hover:text-white transition-colors duration-150 mb-3 px-6 sm:px-10 uppercase tracking-[0.08em] cursor-default">
         {title}
       </h2>
 
-      <div className="flex gap-4 overflow-x-auto px-6 scrollbar-hide">
+      {/* Scrollable card row */}
+      <div className="flex gap-3 overflow-x-auto px-6 sm:px-10 hide-scrollbar pb-2 pt-1">
         {isLoading
-          ? Array.from({ length: 6 }).map((_, i) => (
+          ? Array.from({ length: 7 }).map((_, i) => (
               <Skeleton
                 key={i}
-                className="min-w-[160px] h-48 rounded-lg"
+                className="flex-none w-[150px] sm:w-[185px] aspect-[2/3] rounded-xl"
               />
             ))
-          : data.map((item) => (
-              <ContentCard key={item.id} item={item} />
-            ))}
+          : data.map((item) => <ContentCard key={item.id} item={item} />)}
       </div>
     </section>
   );
